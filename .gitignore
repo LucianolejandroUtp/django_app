@@ -202,6 +202,7 @@ local_settings.py
 
 # Project Documentation (Internal Use Only)
 docs/Atlantis-Lite/
+docs/checklists/
 docs/django_guide_for_experienced_developers.md
 docs/implementation_roadmap.md
 docs/project_requirements.md
