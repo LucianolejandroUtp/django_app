@@ -133,31 +133,6 @@
         <div class="sidebar sidebar-style-2">			
             <div class="sidebar-wrapper scrollbar-outer">
                 <div class="sidebar-content">
-                    <div class="user">
-                        <div class="avatar-sm float-left mr-2">
-                            <img src="{% static 'crm_app/img/profile.jpg' %}" alt="..." class="avatar-img rounded-circle">
-                        </div>
-                        <div class="info">
-                            <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
-                                <span>
-                                    {{ user.get_full_name|default:user.username }}
-                                    <span class="user-level">Sales Rep</span>
-                                    <span class="caret"></span>
-                                </span>
-                            </a>
-                            <div class="clearfix"></div>
-
-                            <div class="collapse in" id="collapseExample">
-                                <ul class="nav">
-                                    <li>
-                                        <a href="{% url 'admin:index' %}">
-                                            <span class="link-collapse">Admin Panel</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
                     <ul class="nav nav-primary">
                         <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
                             <a href="{% url 'crm_app:dashboard' %}" class="collapsed" aria-expanded="false">
@@ -183,44 +158,6 @@
                                 <i class="fas fa-building"></i>
                                 <p>Empresas</p>
                                 <span class="badge badge-info">{{ companies_count|default:0 }}</span>
-                            </a>
-                        </li>
-                        <li class="nav-item">
-                            <a data-toggle="collapse" href="#interactions">
-                                <i class="fas fa-comments"></i>
-                                <p>Interacciones</p>
-                                <span class="caret"></span>
-                            </a>
-                            <div class="collapse" id="interactions">
-                                <ul class="nav nav-collapse">
-                                    <li>
-                                        <a href="#">
-                                            <span class="sub-item">Todas</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span class="sub-item">Llamadas</span>
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a href="#">
-                                            <span class="sub-item">Emails</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                            </div>
-                        </li>
-                        <li class="nav-section">
-                            <span class="sidebar-mini-icon">
-                                <i class="fa fa-ellipsis-h"></i>
-                            </span>
-                            <h4 class="text-section">Herramientas</h4>
-                        </li>
-                        <li class="nav-item">
-                            <a href="{% url 'admin:index' %}">
-                                <i class="fas fa-cogs"></i>
-                                <p>Administración</p>
                             </a>
                         </li>
                     </ul>
