@@ -56,7 +56,7 @@
                                 <input type="hidden" name="search" value="{{ request.GET.search }}">
                             {% endif %}
                             <select name="company" class="form-control" onchange="this.form.submit()">
-                                <option value="">Empresas</option>
+                                <option value="">Empresa...</option>
                                 {% for company in companies %}
                                     <option value="{{ company.id }}" {% if request.GET.company == company.id|slugify %}selected{% endif %}>
                                         {{ company.name }}
@@ -74,7 +74,7 @@
                                 <input type="hidden" name="company" value="{{ request.GET.company }}">
                             {% endif %}
                             <select name="birthday" class="form-control" onchange="this.form.submit()">
-                                <option value="">Cumpleaños</option>
+                                <option value="">Cumpleaños...</option>
                                 <option value="today" {% if request.GET.birthday == 'today' %}selected{% endif %}>Hoy</option>
                                 <option value="this_week" {% if request.GET.birthday == 'this_week' %}selected{% endif %}>Esta semana</option>
                                 <option value="this_month" {% if request.GET.birthday == 'this_month' %}selected{% endif %}>Este mes</option>
@@ -94,13 +94,13 @@
                                 <input type="hidden" name="birthday" value="{{ request.GET.birthday }}">
                             {% endif %}
                             <select name="status" class="form-control" onchange="this.form.submit()">
-                                <option value="">Todos</option>
+                                <option value="">Estado...</option>
                                 <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Activos</option>
                                 <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactivos</option>
                             </select>
                         </form>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <form method="get">
                             {% if request.GET.search %}
                                 <input type="hidden" name="search" value="{{ request.GET.search }}">
@@ -115,14 +115,24 @@
                                 <input type="hidden" name="status" value="{{ request.GET.status }}">
                             {% endif %}
                             <select name="ordering" class="form-control" onchange="this.form.submit()">
-                                <option value="">Ordenar por...</option>
+                                <option value="">Ordenar...</option>
                                 <option value="first_name" {% if request.GET.ordering == 'first_name' %}selected{% endif %}>Nombre A-Z</option>
                                 <option value="-first_name" {% if request.GET.ordering == '-first_name' %}selected{% endif %}>Nombre Z-A</option>
                                 <option value="company__name" {% if request.GET.ordering == 'company__name' %}selected{% endif %}>Empresa A-Z</option>
-                                <option value="-created_at" {% if request.GET.ordering == '-created_at' %}selected{% endif %}>Más recientes</option>
-                                <option value="created_at" {% if request.GET.ordering == 'created_at' %}selected{% endif %}>Más antiguos</option>
+                                <option value="-company__name" {% if request.GET.ordering == '-company__name' %}selected{% endif %}>Empresa Z-A</option>
+                                <option value="-birth_date" {% if request.GET.ordering == '-birth_date' %}selected{% endif %}>Cumpleaños (más jóvenes)</option>
+                                <option value="birth_date" {% if request.GET.ordering == 'birth_date' %}selected{% endif %}>Cumpleaños (más mayores)</option>
+                                <option value="-last_interaction_date" {% if request.GET.ordering == '-last_interaction_date' %}selected{% endif %}>Última interacción reciente</option>
+                                <option value="last_interaction_date" {% if request.GET.ordering == 'last_interaction_date' %}selected{% endif %}>Última interacción antigua</option>
                             </select>
                         </form>
+                    </div>
+                    <div class="col-md-1">
+                        {% if request.GET.search or request.GET.company or request.GET.birthday or request.GET.status or request.GET.ordering %}
+                            <a href="{% url 'crm_app:customer_list' %}" class="btn btn-danger btn-border btn-sm" title="Limpiar todos los filtros">
+                                <i class="fa fa-times"></i>
+                            </a>
+                        {% endif %}
                     </div>
                 </div>
 

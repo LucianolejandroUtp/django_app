@@ -144,7 +144,24 @@ class CustomerListView(ListView):
         # Ordenamiento
         ordering = self.request.GET.get('ordering', 'first_name')
         if ordering:
-            queryset = queryset.order_by(ordering)
+            # Para ordenamiento por fecha de última interacción, manejar valores nulos
+            if ordering in ['last_interaction_date', '-last_interaction_date']:
+                # Los clientes sin interacciones van al final
+                if ordering == 'last_interaction_date':
+                    queryset = queryset.order_by(F('last_interaction_date').asc(nulls_last=True))
+                else:
+                    queryset = queryset.order_by(F('last_interaction_date').desc(nulls_last=True))
+            # Para ordenamiento por cumpleaños, manejar valores nulos
+            elif ordering in ['birth_date', '-birth_date']:
+                # Los clientes sin fecha de nacimiento van al final
+                if ordering == 'birth_date':
+                    # birth_date ascendente = más mayores primero (fechas más antiguas)
+                    queryset = queryset.order_by(F('birth_date').asc(nulls_last=True))
+                else:
+                    # -birth_date descendente = más jóvenes primero (fechas más recientes)
+                    queryset = queryset.order_by(F('birth_date').desc(nulls_last=True))
+            else:
+                queryset = queryset.order_by(ordering)
         
         return queryset
     
