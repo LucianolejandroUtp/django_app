@@ -1,0 +1,267 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ customer.get_full_name }} - Detalle{% endblock %}
+
+{% block page_header %}
+<div class="page-header">
+    <h4 class="page-title">Detalle de Cliente</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home">
+            <a href="{% url 'crm_app:dashboard' %}">
+                <i class="flaticon-home"></i>
+            </a>
+        </li>
+        <li class="separator">
+            <i class="flaticon-right-arrow"></i>
+        </li>
+        <li class="nav-item">
+            <a href="{% url 'crm_app:customer_list' %}">Clientes</a>
+        </li>
+        <li class="separator">
+            <i class="flaticon-right-arrow"></i>
+        </li>
+        <li class="nav-item">
+            <a href="#">{{ customer.get_full_name }}</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card card-profile">
+            <div class="card-header bg-primary">
+                <div class="profile-picture">
+                    <div class="avatar avatar-xl">
+                        <span class="avatar-title rounded-circle border border-white bg-white text-primary">
+                            {{ customer.first_name.0|upper }}{{ customer.last_name.0|upper }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="user-profile text-center">
+                    <div class="name">{{ customer.get_full_name }}</div>
+                    <div class="job">{{ customer.company.name }}</div>
+                    <div class="desc">
+                        Sales Rep: {{ customer.sales_rep.get_full_name }}
+                    </div>
+                    <div class="social-media">
+                        {% if customer.is_active %}
+                            <span class="badge badge-success">Cliente Activo</span>
+                        {% else %}
+                            <span class="badge badge-danger">Cliente Inactivo</span>
+                        {% endif %}
+                    </div>
+                    <div class="view-profile mt-3">
+                        <button class="btn btn-primary btn-sm">Editar Cliente</button>
+                        <button class="btn btn-success btn-sm">Nueva Interacción</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Información Personal</div>
+            </div>
+            <div class="card-body">
+                <table class="table table-typo">
+                    <tbody>
+                        <tr>
+                            <td><strong>Nombre Completo:</strong></td>
+                            <td>{{ customer.get_full_name }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fecha de Nacimiento:</strong></td>
+                            <td>
+                                {% if customer.birth_date %}
+                                    {{ customer.birth_date|date:"d/m/Y" }} ({{ customer.age }} años)
+                                {% else %}
+                                    No especificada
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Empresa:</strong></td>
+                            <td>
+                                <a href="{% url 'crm_app:company_list' %}">{{ customer.company.name }}</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sales Rep:</strong></td>
+                            <td>{{ customer.sales_rep.get_full_name }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fecha de Registro:</strong></td>
+                            <td>{{ customer.created_at|date:"d/m/Y H:i" }}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Última Actualización:</strong></td>
+                            <td>{{ customer.updated_at|timesince }} atrás</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-head-row">
+                    <div class="card-title">Estadísticas de Interacciones</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <div class="card">
+                            <div class="card-body p-3 text-center">
+                                <div class="text-right text-success">
+                                    <span class="h4 fw-bold">{{ interaction_stats.total_count|default:0 }}</span>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-muted mb-0">Total</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <div class="card">
+                            <div class="card-body p-3 text-center">
+                                <div class="text-right text-info">
+                                    <span class="h4 fw-bold">{{ interaction_stats.call_count|default:0 }}</span>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-muted mb-0">Llamadas</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <div class="card">
+                            <div class="card-body p-3 text-center">
+                                <div class="text-right text-warning">
+                                    <span class="h4 fw-bold">{{ interaction_stats.email_count|default:0 }}</span>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-muted mb-0">Emails</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <div class="card">
+                            <div class="card-body p-3 text-center">
+                                <div class="text-right text-secondary">
+                                    <span class="h4 fw-bold">{{ interaction_stats.meeting_count|default:0 }}</span>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-muted mb-0">Reuniones</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <div class="card">
+                            <div class="card-body p-3 text-center">
+                                <div class="text-right text-primary">
+                                    <span class="h4 fw-bold">{{ interaction_stats.sms_count|default:0 }}</span>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-muted mb-0">SMS</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <div class="card">
+                            <div class="card-body p-3 text-center">
+                                <div class="text-right text-danger">
+                                    <span class="h4 fw-bold">{{ interaction_stats.other_count|default:0 }}</span>
+                                </div>
+                                <div class="text-left">
+                                    <p class="text-muted mb-0">Otros</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <div class="card-head-row">
+                    <div class="card-title">Historial de Interacciones</div>
+                    <div class="card-tools">
+                        <button class="btn btn-info btn-border btn-round btn-sm">
+                            <span class="btn-label">
+                                <i class="fa fa-plus"></i>
+                            </span>
+                            Nueva Interacción
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="timeline">
+                    {% for interaction in recent_interactions %}
+                    <div class="timeline-item">
+                        <div class="timeline-item-icon 
+                            {% if interaction.interaction_type == 'Call' %}bg-info
+                            {% elif interaction.interaction_type == 'Email' %}bg-warning
+                            {% elif interaction.interaction_type == 'Meeting' %}bg-success
+                            {% elif interaction.interaction_type == 'SMS' %}bg-primary
+                            {% else %}bg-secondary{% endif %}">
+                            {% if interaction.interaction_type == 'Call' %}
+                                <i class="fas fa-phone"></i>
+                            {% elif interaction.interaction_type == 'Email' %}
+                                <i class="fas fa-envelope"></i>
+                            {% elif interaction.interaction_type == 'Meeting' %}
+                                <i class="fas fa-handshake"></i>
+                            {% elif interaction.interaction_type == 'SMS' %}
+                                <i class="fas fa-sms"></i>
+                            {% elif interaction.interaction_type == 'WhatsApp' %}
+                                <i class="fab fa-whatsapp"></i>
+                            {% elif interaction.interaction_type == 'Facebook' %}
+                                <i class="fab fa-facebook"></i>
+                            {% else %}
+                                <i class="fas fa-comment"></i>
+                            {% endif %}
+                        </div>
+                        <div class="timeline-item-content">
+                            <div class="timeline-item-time">{{ interaction.interaction_date|timesince }} atrás</div>
+                            <h6 class="timeline-item-title">{{ interaction.interaction_type }}</h6>
+                            <p class="timeline-item-desc">
+                                Interacción registrada el {{ interaction.interaction_date|date:"d/m/Y H:i" }}
+                                {% if not interaction.is_active %}
+                                    <span class="badge badge-danger ml-2">Inactiva</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="text-center py-4">
+                        <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No hay interacciones registradas</h5>
+                        <p class="text-muted">Las interacciones aparecerán aquí cuando se registren.</p>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                {% if recent_interactions %}
+                <div class="text-center mt-3">
+                    <button class="btn btn-primary btn-border btn-round">
+                        Ver Todas las Interacciones ({{ interaction_stats.total_count }})
+                    </button>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

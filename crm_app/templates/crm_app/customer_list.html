@@ -1,0 +1,249 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Clientes{% endblock %}
+
+{% block page_header %}
+<div class="page-header">
+    <h4 class="page-title">Lista de Clientes</h4>
+    <ul class="breadcrumbs">
+        <li class="nav-home">
+            <a href="{% url 'crm_app:dashboard' %}">
+                <i class="flaticon-home"></i>
+            </a>
+        </li>
+        <li class="separator">
+            <i class="flaticon-right-arrow"></i>
+        </li>
+        <li class="nav-item">
+            <a href="#">Clientes</a>
+        </li>
+    </ul>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <div class="d-flex align-items-center">
+                    <h4 class="card-title">Clientes</h4>
+                    <button class="btn btn-primary btn-round ml-auto">
+                        <i class="fa fa-plus"></i>
+                        Añadir Cliente
+                    </button>
+                </div>
+            </div>
+            <div class="card-body">
+                <!-- Filtros -->
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <form method="get" class="form-inline">
+                            <div class="input-group">
+                                <input type="text" name="search" class="form-control" placeholder="Buscar por nombre..." value="{{ request.GET.search }}">
+                                <div class="input-group-append">
+                                    <button class="btn btn-search" type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-3">
+                        <form method="get">
+                            {% if request.GET.search %}
+                                <input type="hidden" name="search" value="{{ request.GET.search }}">
+                            {% endif %}
+                            <select name="company" class="form-control" onchange="this.form.submit()">
+                                <option value="">Todas las empresas</option>
+                                {% for company in companies %}
+                                    <option value="{{ company.id }}" {% if request.GET.company == company.id|slugify %}selected{% endif %}>
+                                        {{ company.name }}
+                                    </option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                    </div>
+                    <div class="col-md-2">
+                        <form method="get">
+                            {% if request.GET.search %}
+                                <input type="hidden" name="search" value="{{ request.GET.search }}">
+                            {% endif %}
+                            {% if request.GET.company %}
+                                <input type="hidden" name="company" value="{{ request.GET.company }}">
+                            {% endif %}
+                            <select name="status" class="form-control" onchange="this.form.submit()">
+                                <option value="">Todos</option>
+                                <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Activos</option>
+                                <option value="inactive" {% if request.GET.status == 'inactive' %}selected{% endif %}>Inactivos</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="col-md-3">
+                        <form method="get">
+                            {% if request.GET.search %}
+                                <input type="hidden" name="search" value="{{ request.GET.search }}">
+                            {% endif %}
+                            {% if request.GET.company %}
+                                <input type="hidden" name="company" value="{{ request.GET.company }}">
+                            {% endif %}
+                            {% if request.GET.status %}
+                                <input type="hidden" name="status" value="{{ request.GET.status }}">
+                            {% endif %}
+                            <select name="ordering" class="form-control" onchange="this.form.submit()">
+                                <option value="">Ordenar por...</option>
+                                <option value="first_name" {% if request.GET.ordering == 'first_name' %}selected{% endif %}>Nombre A-Z</option>
+                                <option value="-first_name" {% if request.GET.ordering == '-first_name' %}selected{% endif %}>Nombre Z-A</option>
+                                <option value="company__name" {% if request.GET.ordering == 'company__name' %}selected{% endif %}>Empresa A-Z</option>
+                                <option value="-created_at" {% if request.GET.ordering == '-created_at' %}selected{% endif %}>Más recientes</option>
+                                <option value="created_at" {% if request.GET.ordering == 'created_at' %}selected{% endif %}>Más antiguos</option>
+                            </select>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Tabla de clientes -->
+                <div class="table-responsive">
+                    <table class="table table-striped mt-3">
+                        <thead>
+                            <tr>
+                                <th scope="col">Cliente</th>
+                                <th scope="col">Empresa</th>
+                                <th scope="col">Fecha Nac.</th>
+                                <th scope="col">Última Interacción</th>
+                                <th scope="col">Estado</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for customer in customers %}
+                            <tr>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar avatar-sm mr-2">
+                                            {% if customer.get_full_name %}
+                                                <span class="avatar-title rounded-circle border border-white bg-primary text-white">
+                                                    {{ customer.first_name.0|upper }}{{ customer.last_name.0|upper }}
+                                                </span>
+                                            {% else %}
+                                                <span class="avatar-title rounded-circle border border-white bg-secondary text-white">
+                                                    ?
+                                                </span>
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <h6 class="mb-0">
+                                                <a href="{% url 'crm_app:customer_detail' customer.pk %}" class="text-dark">
+                                                    {{ customer.get_full_name }}
+                                                </a>
+                                            </h6>
+                                            <small class="text-muted">Sales Rep: {{ customer.sales_rep.get_full_name }}</small>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="fw-bold">{{ customer.company.name }}</span>
+                                </td>
+                                <td>
+                                    {% if customer.birth_date %}
+                                        {{ customer.birth_date|date:"d M Y" }}
+                                        <br>
+                                        <small class="text-muted">
+                                            {{ customer.age }} años
+                                        </small>
+                                    {% else %}
+                                        <span class="text-muted">No especificada</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if customer.last_interaction_date %}
+                                        <span class="text-success">{{ customer.last_interaction_date|timesince }} atrás</span>
+                                        <br>
+                                        <small class="text-muted">{{ customer.last_interaction_type }}</small>
+                                    {% else %}
+                                        <span class="text-muted">Sin interacciones</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if customer.is_active %}
+                                        <span class="badge badge-success">Activo</span>
+                                    {% else %}
+                                        <span class="badge badge-danger">Inactivo</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <div class="form-button-action">
+                                        <a href="{% url 'crm_app:customer_detail' customer.pk %}" class="btn btn-link btn-primary btn-lg" data-original-title="Ver Detalles">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-link btn-primary btn-lg" data-original-title="Editar">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-link btn-danger" data-original-title="Eliminar">
+                                            <i class="fa fa-times"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="text-center">
+                                    <div class="py-4">
+                                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                                        <h5 class="text-muted">No se encontraron clientes</h5>
+                                        <p class="text-muted">Intenta ajustar los filtros o añade nuevos clientes.</p>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Paginación -->
+                {% if is_paginated %}
+                <div class="d-flex justify-content-between align-items-center mt-4">
+                    <div>
+                        <span class="text-muted">
+                            Mostrando {{ page_obj.start_index }}-{{ page_obj.end_index }} de {{ paginator.count }} clientes
+                        </span>
+                    </div>
+                    <nav aria-label="Navegación de páginas">
+                        <ul class="pagination">
+                            {% if page_obj.has_previous %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                                        <span aria-hidden="true">&laquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+
+                            {% for page_num in page_obj.paginator.page_range %}
+                                {% if page_num == page_obj.number %}
+                                    <li class="page-item active">
+                                        <span class="page-link">{{ page_num }}</span>
+                                    </li>
+                                {% elif page_num > page_obj.number|add:-3 and page_num < page_obj.number|add:3 %}
+                                    <li class="page-item">
+                                        <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_num }}">{{ page_num }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+
+                            {% if page_obj.has_next %}
+                                <li class="page-item">
+                                    <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Siguiente">
+                                        <span aria-hidden="true">&raquo;</span>
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </nav>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

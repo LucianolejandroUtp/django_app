@@ -1,0 +1,287 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>{% block title %}CRM Sistema{% endblock %} - Django CRM</title>
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+    <link rel="icon" href="{% static 'crm_app/img/icon.ico' %}" type="image/x-icon"/>
+
+    <!-- Fonts and icons -->
+    <script src="{% static 'crm_app/js/plugin/webfont/webfont.min.js' %}"></script>
+    <script>
+        WebFont.load({
+            google: {"families":["Lato:300,400,700,900"]},
+            custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['{% static "crm_app/css/fonts.min.css" %}']},
+            active: function() {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
+
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="{% static 'crm_app/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'crm_app/css/atlantis.min.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="wrapper">
+        <div class="main-header">
+            <!-- Logo Header -->
+            <div class="logo-header" data-background-color="blue">
+                <a href="{% url 'crm_app:dashboard' %}" class="logo">
+                    <img src="{% static 'crm_app/img/logo.svg' %}" alt="CRM Logo" class="navbar-brand">
+                </a>
+                <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                        <i class="icon-menu"></i>
+                    </span>
+                </button>
+                <button class="topbar-toggler more"><i class="icon-options-vertical"></i></button>
+                <div class="nav-toggle">
+                    <button class="btn btn-toggle toggle-sidebar">
+                        <i class="icon-menu"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- End Logo Header -->
+
+            <!-- Navbar Header -->
+            <nav class="navbar navbar-header navbar-expand-lg" data-background-color="blue2">
+                <div class="container-fluid">
+                    <div class="collapse" id="search-nav">
+                        <form class="navbar-left navbar-form nav-search mr-md-3">
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <button type="submit" class="btn btn-search pr-1">
+                                        <i class="fa fa-search search-icon"></i>
+                                    </button>
+                                </div>
+                                <input type="text" placeholder="Buscar clientes..." class="form-control">
+                            </div>
+                        </form>
+                    </div>
+                    <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                        <li class="nav-item toggle-nav-search hidden-caret">
+                            <a class="nav-link" data-toggle="collapse" href="#search-nav" role="button" aria-expanded="false" aria-controls="search-nav">
+                                <i class="fa fa-search"></i>
+                            </a>
+                        </li>
+                        <li class="nav-item dropdown hidden-caret">
+                            <a class="nav-link" data-toggle="dropdown" href="#" aria-expanded="false">
+                                <i class="fas fa-layer-group"></i>
+                            </a>
+                            <div class="dropdown-menu quick-actions quick-actions-info animated fadeIn">
+                                <div class="quick-actions-header">
+                                    <span class="title mb-1">Acciones Rápidas</span>
+                                    <span class="subtitle op-8">Atajos</span>
+                                </div>
+                                <div class="quick-actions-scroll scrollbar-outer">
+                                    <div class="quick-actions-items">
+                                        <div class="row m-0">
+                                            <a class="col-6 col-md-4 p-0" href="{% url 'crm_app:customer_list' %}">
+                                                <div class="quick-actions-item">
+                                                    <i class="flaticon-file-1"></i>
+                                                    <span class="text">Clientes</span>
+                                                </div>
+                                            </a>
+                                            <a class="col-6 col-md-4 p-0" href="{% url 'crm_app:company_list' %}">
+                                                <div class="quick-actions-item">
+                                                    <i class="flaticon-database"></i>
+                                                    <span class="text">Empresas</span>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown hidden-caret">
+                            <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
+                                <div class="avatar-sm">
+                                    <img src="{% static 'crm_app/img/profile.jpg' %}" alt="..." class="avatar-img rounded-circle">
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-user animated fadeIn">
+                                <div class="dropdown-user-scroll scrollbar-outer">
+                                    <li>
+                                        <div class="user-box">
+                                            <div class="avatar-lg"><img src="{% static 'crm_app/img/profile.jpg' %}" alt="image profile" class="avatar-img rounded"></div>
+                                            <div class="u-text">
+                                                <h4>{{ user.get_full_name|default:user.username }}</h4>
+                                                <p class="text-muted">{{ user.email }}</p>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'admin:index' %}">Admin Panel</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="{% url 'admin:logout' %}">Cerrar Sesión</a>
+                                    </li>
+                                </div>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+        </div>
+
+        <!-- Sidebar -->
+        <div class="sidebar sidebar-style-2">			
+            <div class="sidebar-wrapper scrollbar-outer">
+                <div class="sidebar-content">
+                    <div class="user">
+                        <div class="avatar-sm float-left mr-2">
+                            <img src="{% static 'crm_app/img/profile.jpg' %}" alt="..." class="avatar-img rounded-circle">
+                        </div>
+                        <div class="info">
+                            <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+                                <span>
+                                    {{ user.get_full_name|default:user.username }}
+                                    <span class="user-level">Sales Rep</span>
+                                    <span class="caret"></span>
+                                </span>
+                            </a>
+                            <div class="clearfix"></div>
+
+                            <div class="collapse in" id="collapseExample">
+                                <ul class="nav">
+                                    <li>
+                                        <a href="{% url 'admin:index' %}">
+                                            <span class="link-collapse">Admin Panel</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <ul class="nav nav-primary">
+                        <li class="nav-item {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                            <a href="{% url 'crm_app:dashboard' %}" class="collapsed" aria-expanded="false">
+                                <i class="fas fa-home"></i>
+                                <p>Dashboard</p>
+                            </a>
+                        </li>
+                        <li class="nav-section">
+                            <span class="sidebar-mini-icon">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </span>
+                            <h4 class="text-section">CRM</h4>
+                        </li>
+                        <li class="nav-item {% if request.resolver_match.url_name == 'customer_list' or request.resolver_match.url_name == 'customer_detail' %}active{% endif %}">
+                            <a href="{% url 'crm_app:customer_list' %}">
+                                <i class="fas fa-users"></i>
+                                <p>Clientes</p>
+                                <span class="badge badge-success">{{ customers_count|default:0 }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item {% if request.resolver_match.url_name == 'company_list' %}active{% endif %}">
+                            <a href="{% url 'crm_app:company_list' %}">
+                                <i class="fas fa-building"></i>
+                                <p>Empresas</p>
+                                <span class="badge badge-info">{{ companies_count|default:0 }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a data-toggle="collapse" href="#interactions">
+                                <i class="fas fa-comments"></i>
+                                <p>Interacciones</p>
+                                <span class="caret"></span>
+                            </a>
+                            <div class="collapse" id="interactions">
+                                <ul class="nav nav-collapse">
+                                    <li>
+                                        <a href="#">
+                                            <span class="sub-item">Todas</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="sub-item">Llamadas</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <span class="sub-item">Emails</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </li>
+                        <li class="nav-section">
+                            <span class="sidebar-mini-icon">
+                                <i class="fa fa-ellipsis-h"></i>
+                            </span>
+                            <h4 class="text-section">Herramientas</h4>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'admin:index' %}">
+                                <i class="fas fa-cogs"></i>
+                                <p>Administración</p>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- End Sidebar -->
+
+        <div class="main-panel">
+            <div class="content">
+                <div class="page-inner">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+
+                    {% block page_header %}{% endblock %}
+
+                    {% block content %}{% endblock %}
+                </div>
+            </div>
+            <footer class="footer">
+                <div class="container-fluid">
+                    <nav class="pull-left">
+                        <ul class="nav">
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'crm_app:dashboard' %}">
+                                    Django CRM
+                                </a>
+                            </li>
+                        </ul>
+                    </nav>
+                    <div class="copyright ml-auto">
+                        {% now "Y" %}, desarrollado con <i class="fa fa-heart heart text-danger"></i> usando Django
+                    </div>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Core JS Files -->
+    <script src="{% static 'crm_app/js/core/jquery.3.2.1.min.js' %}"></script>
+    <script src="{% static 'crm_app/js/core/popper.min.js' %}"></script>
+    <script src="{% static 'crm_app/js/core/bootstrap.min.js' %}"></script>
+
+    <!-- jQuery UI -->
+    <script src="{% static 'crm_app/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js' %}"></script>
+    <script src="{% static 'crm_app/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js' %}"></script>
+
+    <!-- jQuery Scrollbar -->
+    <script src="{% static 'crm_app/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js' %}"></script>
+
+    <!-- Atlantis JS -->
+    <script src="{% static 'crm_app/js/atlantis.min.js' %}"></script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
