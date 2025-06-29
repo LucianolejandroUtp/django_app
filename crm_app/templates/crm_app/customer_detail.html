@@ -118,73 +118,85 @@
             <div class="card-body">
                 <div class="row">
                     <div class="col-6 col-sm-4 col-lg-2">
-                        <div class="card">
-                            <div class="card-body p-3 text-center">
-                                <div class="text-right text-success">
-                                    <span class="h4 fw-bold">{{ interaction_stats.total_count|default:0 }}</span>
-                                </div>
-                                <div class="text-left">
-                                    <p class="text-muted mb-0">Total</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-sm-4 col-lg-2">
-                        <div class="card">
-                            <div class="card-body p-3 text-center">
-                                <div class="text-right text-info">
-                                    <span class="h4 fw-bold">{{ interaction_stats.call_count|default:0 }}</span>
-                                </div>
-                                <div class="text-left">
-                                    <p class="text-muted mb-0">Llamadas</p>
+                        <div class="card card-stats card-round">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="numbers text-center">
+                                            <h4 class="card-title text-success mb-0">{{ interaction_stats.total_count|default:0 }}</h4>
+                                            <p class="card-category text-muted">Total</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-sm-4 col-lg-2">
-                        <div class="card">
-                            <div class="card-body p-3 text-center">
-                                <div class="text-right text-warning">
-                                    <span class="h4 fw-bold">{{ interaction_stats.email_count|default:0 }}</span>
-                                </div>
-                                <div class="text-left">
-                                    <p class="text-muted mb-0">Emails</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6 col-sm-4 col-lg-2">
-                        <div class="card">
-                            <div class="card-body p-3 text-center">
-                                <div class="text-right text-secondary">
-                                    <span class="h4 fw-bold">{{ interaction_stats.meeting_count|default:0 }}</span>
-                                </div>
-                                <div class="text-left">
-                                    <p class="text-muted mb-0">Reuniones</p>
+                        <div class="card card-stats card-round">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="numbers text-center">
+                                            <h4 class="card-title text-info mb-0">{{ interaction_stats.call_count|default:0 }}</h4>
+                                            <p class="card-category text-muted">Llamadas</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-sm-4 col-lg-2">
-                        <div class="card">
-                            <div class="card-body p-3 text-center">
-                                <div class="text-right text-primary">
-                                    <span class="h4 fw-bold">{{ interaction_stats.sms_count|default:0 }}</span>
-                                </div>
-                                <div class="text-left">
-                                    <p class="text-muted mb-0">SMS</p>
+                        <div class="card card-stats card-round">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="numbers text-center">
+                                            <h4 class="card-title text-warning mb-0">{{ interaction_stats.email_count|default:0 }}</h4>
+                                            <p class="card-category text-muted">Emails</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6 col-sm-4 col-lg-2">
-                        <div class="card">
-                            <div class="card-body p-3 text-center">
-                                <div class="text-right text-danger">
-                                    <span class="h4 fw-bold">{{ interaction_stats.other_count|default:0 }}</span>
+                        <div class="card card-stats card-round">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="numbers text-center">
+                                            <h4 class="card-title text-secondary mb-0">{{ interaction_stats.meeting_count|default:0 }}</h4>
+                                            <p class="card-category text-muted">Reuniones</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="text-left">
-                                    <p class="text-muted mb-0">Otros</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <div class="card card-stats card-round">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="numbers text-center">
+                                            <h4 class="card-title text-primary mb-0">{{ interaction_stats.sms_count|default:0 }}</h4>
+                                            <p class="card-category text-muted">SMS</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-sm-4 col-lg-2">
+                        <div class="card card-stats card-round">
+                            <div class="card-body p-3">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <div class="numbers text-center">
+                                            <h4 class="card-title text-danger mb-0">{{ interaction_stats.other_count|default:0 }}</h4>
+                                            <p class="card-category text-muted">Otros</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -208,15 +220,15 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="timeline">
+                <ul class="timeline">
                     {% for interaction in recent_interactions %}
-                    <div class="timeline-item">
-                        <div class="timeline-item-icon 
-                            {% if interaction.interaction_type == 'Call' %}bg-info
-                            {% elif interaction.interaction_type == 'Email' %}bg-warning
-                            {% elif interaction.interaction_type == 'Meeting' %}bg-success
-                            {% elif interaction.interaction_type == 'SMS' %}bg-primary
-                            {% else %}bg-secondary{% endif %}">
+                    <li{% if forloop.counter|divisibleby:2 %} class="timeline-inverted"{% endif %}>
+                        <div class="timeline-badge 
+                            {% if interaction.interaction_type == 'Call' %}info
+                            {% elif interaction.interaction_type == 'Email' %}warning
+                            {% elif interaction.interaction_type == 'Meeting' %}success
+                            {% elif interaction.interaction_type == 'SMS' %}primary
+                            {% else %}secondary{% endif %}">
                             {% if interaction.interaction_type == 'Call' %}
                                 <i class="fas fa-phone"></i>
                             {% elif interaction.interaction_type == 'Email' %}
@@ -233,25 +245,31 @@
                                 <i class="fas fa-comment"></i>
                             {% endif %}
                         </div>
-                        <div class="timeline-item-content">
-                            <div class="timeline-item-time">{{ interaction.interaction_date|timesince }} atrás</div>
-                            <h6 class="timeline-item-title">{{ interaction.interaction_type }}</h6>
-                            <p class="timeline-item-desc">
-                                Interacción registrada el {{ interaction.interaction_date|date:"d/m/Y H:i" }}
+                        <div class="timeline-panel">
+                            <div class="timeline-heading">
+                                <h6 class="timeline-title">{{ interaction.interaction_type }}</h6>
+                                <small class="text-muted">{{ interaction.interaction_date|timesince }} atrás</small>
+                            </div>
+                            <div class="timeline-body">
+                                <p>Interacción registrada el {{ interaction.interaction_date|date:"d/m/Y H:i" }}</p>
                                 {% if not interaction.is_active %}
-                                    <span class="badge badge-danger ml-2">Inactiva</span>
+                                    <span class="badge badge-danger">Inactiva</span>
                                 {% endif %}
-                            </p>
+                            </div>
                         </div>
-                    </div>
+                    </li>
                     {% empty %}
-                    <div class="text-center py-4">
-                        <i class="fas fa-comments fa-3x text-muted mb-3"></i>
-                        <h5 class="text-muted">No hay interacciones registradas</h5>
-                        <p class="text-muted">Las interacciones aparecerán aquí cuando se registren.</p>
-                    </div>
+                    <li>
+                        <div class="timeline-panel">
+                            <div class="text-center py-4">
+                                <i class="fas fa-comments fa-3x text-muted mb-3"></i>
+                                <h5 class="text-muted">No hay interacciones registradas</h5>
+                                <p class="text-muted">Las interacciones aparecerán aquí cuando se registren.</p>
+                            </div>
+                        </div>
+                    </li>
                     {% endfor %}
-                </div>
+                </ul>
                 
                 {% if recent_interactions %}
                 <div class="text-center mt-3">

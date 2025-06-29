@@ -110,7 +110,7 @@
                             <tr>
                                 <th scope="col">Cliente</th>
                                 <th scope="col">Empresa</th>
-                                <th scope="col">Fecha Nac.</th>
+                                <th scope="col">Cumpleaños</th>
                                 <th scope="col">Última Interacción</th>
                                 <th scope="col">Estado</th>
                                 <th scope="col">Acciones</th>
@@ -147,13 +147,13 @@
                                 </td>
                                 <td>
                                     {% if customer.birth_date %}
-                                        {{ customer.birth_date|date:"d M Y" }}
+                                        {{ customer.birth_date|date:"F j" }}
                                         <br>
                                         <small class="text-muted">
-                                            {{ customer.age }} años
+                                            Cumple {{ customer.age }}
                                         </small>
                                     {% else %}
-                                        <span class="text-muted">No especificada</span>
+                                        <span class="text-muted">No especificado</span>
                                     {% endif %}
                                 </td>
                                 <td>
