@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q, Count, Max, F, CharField, Value
+from django.db.models import Q, Count, Max, F, CharField, Value, Subquery, OuterRef
 from django.db.models.functions import Concat
 from django.contrib.auth.models import User
 from django.http import HttpResponse
@@ -25,11 +25,15 @@ class DashboardView(TemplateView):
         }
         
         # Clientes recientes con última interacción
+        latest_interaction_subquery = Interaction.objects.filter(
+            customer=OuterRef('pk')
+        ).order_by('-interaction_date')
+        
         context['recent_customers'] = Customer.objects.select_related(
             'company', 'sales_rep'
         ).annotate(
             last_interaction_date=Max('interactions__interaction_date'),
-            last_interaction_type=Max('interactions__interaction_type')
+            last_interaction_type=Subquery(latest_interaction_subquery.values('interaction_type')[:1])
         ).order_by('-created_at')[:10]
         
         # Estadísticas por sales rep
@@ -75,11 +79,16 @@ class CustomerListView(ListView):
     paginate_by = 25
     
     def get_queryset(self):
+        # Subquery para obtener el tipo de la interacción más reciente
+        latest_interaction = Interaction.objects.filter(
+            customer=OuterRef('pk')
+        ).order_by('-interaction_date')
+        
         queryset = Customer.objects.select_related(
             'company', 'sales_rep'
         ).annotate(
             last_interaction_date=Max('interactions__interaction_date'),
-            last_interaction_type=Max('interactions__interaction_type')
+            last_interaction_type=Subquery(latest_interaction.values('interaction_type')[:1])
         )
         
         # Filtro de búsqueda por nombre
