@@ -38,7 +38,7 @@
             <div class="card-body">
                 <!-- Filtros -->
                 <div class="row mb-3">
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         <form method="get" class="form-inline">
                             <div class="input-group">
                                 <input type="text" name="search" class="form-control" placeholder="Buscar por nombre..." value="{{ request.GET.search }}">
@@ -50,13 +50,13 @@
                             </div>
                         </form>
                     </div>
-                    <div class="col-md-3">
+                    <div class="col-md-2">
                         <form method="get">
                             {% if request.GET.search %}
                                 <input type="hidden" name="search" value="{{ request.GET.search }}">
                             {% endif %}
                             <select name="company" class="form-control" onchange="this.form.submit()">
-                                <option value="">Todas las empresas</option>
+                                <option value="">Empresas</option>
                                 {% for company in companies %}
                                     <option value="{{ company.id }}" {% if request.GET.company == company.id|slugify %}selected{% endif %}>
                                         {{ company.name }}
@@ -73,6 +73,26 @@
                             {% if request.GET.company %}
                                 <input type="hidden" name="company" value="{{ request.GET.company }}">
                             {% endif %}
+                            <select name="birthday" class="form-control" onchange="this.form.submit()">
+                                <option value="">Cumpleaños</option>
+                                <option value="today" {% if request.GET.birthday == 'today' %}selected{% endif %}>Hoy</option>
+                                <option value="this_week" {% if request.GET.birthday == 'this_week' %}selected{% endif %}>Esta semana</option>
+                                <option value="this_month" {% if request.GET.birthday == 'this_month' %}selected{% endif %}>Este mes</option>
+                                <option value="next_month" {% if request.GET.birthday == 'next_month' %}selected{% endif %}>Próximo mes</option>
+                            </select>
+                        </form>
+                    </div>
+                    <div class="col-md-2">
+                        <form method="get">
+                            {% if request.GET.search %}
+                                <input type="hidden" name="search" value="{{ request.GET.search }}">
+                            {% endif %}
+                            {% if request.GET.company %}
+                                <input type="hidden" name="company" value="{{ request.GET.company }}">
+                            {% endif %}
+                            {% if request.GET.birthday %}
+                                <input type="hidden" name="birthday" value="{{ request.GET.birthday }}">
+                            {% endif %}
                             <select name="status" class="form-control" onchange="this.form.submit()">
                                 <option value="">Todos</option>
                                 <option value="active" {% if request.GET.status == 'active' %}selected{% endif %}>Activos</option>
@@ -87,6 +107,9 @@
                             {% endif %}
                             {% if request.GET.company %}
                                 <input type="hidden" name="company" value="{{ request.GET.company }}">
+                            {% endif %}
+                            {% if request.GET.birthday %}
+                                <input type="hidden" name="birthday" value="{{ request.GET.birthday }}">
                             {% endif %}
                             {% if request.GET.status %}
                                 <input type="hidden" name="status" value="{{ request.GET.status }}">
@@ -198,7 +221,7 @@
                         <ul class="pagination">
                             {% if page_obj.has_previous %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Anterior">
+                                    <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.birthday %}birthday={{ request.GET.birthday }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Anterior">
                                         <span aria-hidden="true">&laquo;</span>
                                     </a>
                                 </li>
@@ -211,14 +234,14 @@
                                     </li>
                                 {% elif page_num > page_obj.number|add:-3 and page_num < page_obj.number|add:3 %}
                                     <li class="page-item">
-                                        <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_num }}">{{ page_num }}</a>
+                                        <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.birthday %}birthday={{ request.GET.birthday }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_num }}">{{ page_num }}</a>
                                     </li>
                                 {% endif %}
                             {% endfor %}
 
                             {% if page_obj.has_next %}
                                 <li class="page-item">
-                                    <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Siguiente">
+                                    <a class="page-link" href="?{% if request.GET.search %}search={{ request.GET.search }}&{% endif %}{% if request.GET.company %}company={{ request.GET.company }}&{% endif %}{% if request.GET.birthday %}birthday={{ request.GET.birthday }}&{% endif %}{% if request.GET.status %}status={{ request.GET.status }}&{% endif %}{% if request.GET.ordering %}ordering={{ request.GET.ordering }}&{% endif %}page={{ page_obj.next_page_number }}" aria-label="Siguiente">
                                         <span aria-hidden="true">&raquo;</span>
                                     </a>
                                 </li>

@@ -2,11 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.views.generic import ListView, DetailView, TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q, Count, Max, F, CharField, Value, Subquery, OuterRef
-from django.db.models.functions import Concat
+from django.db.models.functions import Concat, Extract
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from .models import Customer, Company, Interaction
-from datetime import datetime
+from datetime import datetime, date, timedelta
 
 
 class DashboardView(TemplateView):
@@ -110,6 +110,36 @@ class CustomerListView(ListView):
             queryset = queryset.filter(is_active=True)
         elif status == 'inactive':
             queryset = queryset.filter(is_active=False)
+        
+        # Filtro por cumpleaños
+        birthday_filter = self.request.GET.get('birthday')
+        if birthday_filter:
+            today = date.today()
+            
+            if birthday_filter == 'today':
+                queryset = queryset.filter(
+                    birth_date__month=today.month,
+                    birth_date__day=today.day
+                )
+            elif birthday_filter == 'this_week':
+                # Cumpleaños en los próximos 7 días
+                week_dates = []
+                for i in range(7):
+                    day = today + timedelta(days=i)
+                    week_dates.append((day.month, day.day))
+                
+                birthday_q = Q()
+                for month, day in week_dates:
+                    birthday_q |= Q(birth_date__month=month, birth_date__day=day)
+                queryset = queryset.filter(birthday_q)
+            
+            elif birthday_filter == 'this_month':
+                queryset = queryset.filter(birth_date__month=today.month)
+            
+            elif birthday_filter == 'next_month':
+                next_month = today.replace(day=28) + timedelta(days=4)
+                next_month = next_month.replace(day=1)
+                queryset = queryset.filter(birth_date__month=next_month.month)
         
         # Ordenamiento
         ordering = self.request.GET.get('ordering', 'first_name')
